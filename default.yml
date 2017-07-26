@@ -1,4 +1,4 @@
 taxonomy_index:
     path:     /
-    defaults: { _controller: :Default:index }
+    defaults: { _controller: PhpTaxonomy\MultiTaxonomy\DbalUtil\Pagerfanta\Twig\Controller\Default::indexAction }
     methods:  [GET]
