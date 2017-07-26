@@ -1,3 +1,4 @@
 taxonomy_index:
     path:     /
     defaults: { _controller: Default:index }
+    methods:  [GET]
