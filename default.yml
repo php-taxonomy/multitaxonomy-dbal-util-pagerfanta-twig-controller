@@ -2,3 +2,23 @@ taxonomy_index:
     path:     /
     defaults: { _controller: PhpTaxonomy\MultiTaxonomy\DbalUtil\Pagerfanta\Twig\Controller\MultiTaxonomyController::indexAction }
     methods:  [GET]
+
+taxonomy_new:
+    path:     /new
+    defaults: { _controller: PhpTaxonomy\MultiTaxonomy\DbalUtil\Pagerfanta\Twig\Controller\MultiTaxonomyController::newAction }
+    methods:  [GET, POST]
+
+taxonomy_edit:
+    path:     /edit/{uuid}
+    defaults: { _controller: PhpTaxonomy\MultiTaxonomy\DbalUtil\Pagerfanta\Twig\Controller\MultiTaxonomyController::editAction }
+    methods:  [GET, POST]
+    
+taxonomy_show:
+    path:     /{uuid}
+    defaults: { _controller: PhpTaxonomy\MultiTaxonomy\DbalUtil\Pagerfanta\Twig\Controller\MultiTaxonomyController::showAction }
+    methods:  [GET]
+
+taxonomy_delete:
+    path:     /{uuid}
+    defaults: { _controller: PhpTaxonomy\MultiTaxonomy\DbalUtil\Pagerfanta\Twig\Controller\MultiTaxonomyController::deleteAction }
+    methods:  [DELETE]
