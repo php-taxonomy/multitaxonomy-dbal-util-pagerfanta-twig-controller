@@ -24,7 +24,7 @@
     "suggest": {
     },
     "autoload": {
-        "psr-4": { "PhpTaxonomy\\MultiTaxonomy\\DbalUtil\\Pagerfanta\\Twig\\": "" }
+        "psr-4": { "PhpTaxonomy\\MultiTaxonomy\\DbalUtil\\Pagerfanta\\Twig\\Controller": "" }
     },
     "extra": {
         "branch-alias": {
