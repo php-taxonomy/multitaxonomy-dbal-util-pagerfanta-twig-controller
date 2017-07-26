@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpTaxonomy\MultiTaxonomy\DbalUtilBundle;
+namespace PhpTaxonomy\MultiTaxonomy\DbalUtil\Pagerfanta\Twig\Controller;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
