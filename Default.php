@@ -17,7 +17,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *
  * @Route("taxonomy")
  */
-class DefaultController extends Controller
+class Default extends Controller
 {
     /**
      * Lists all taxonomy tree entities.
