@@ -16,3 +16,4 @@ $routes->import(
 ); // does not work!
 */
 ```
+Annotation may need the controllers to be inside of a directory named Controller, like in a Symfony bundle.
