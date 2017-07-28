@@ -279,7 +279,7 @@ class MultiTaxonomyController extends FrameworkController
      */
     private function createDeleteForm(
         array $taxonomyTree,
-        FormFactoryInterface $formFactory,
+        FormFactoryInterface $formFactory
     )
     {
         return $formFactory->createFormBuilder()
