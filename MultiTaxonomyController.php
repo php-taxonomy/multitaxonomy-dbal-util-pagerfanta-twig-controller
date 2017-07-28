@@ -33,7 +33,7 @@ class MultiTaxonomyController extends FrameworkController
         UserInterface $user,
         EngineInterface $templating,
         AuthorizationCheckerInterface $AuthorizationChecker,
-        RaphiaDBAL $model
+        \RaphiaDBAL $model
         // TODO: use an interface
         // https://symfony.com/doc/master/service_container.html#the-autowire-option
     )
