@@ -7,7 +7,7 @@ namespace PhpTaxonomy\MultiTaxonomy\DbalUtil\Pagerfanta\Twig\Controller;
 // use Doctrine\DBAL\Driver\Connection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller as FrameworkController;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as FrameworkAbstractController;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,7 +24,7 @@ use Symfony\Component\Templating\EngineInterface;
  *
  * @Route("taxonomy")
  */
-class MultiTaxonomyController extends FrameworkController
+class MultiTaxonomyController extends FrameworkAbstractController
 {
     /**
      * Lists all taxonomy tree entities.
