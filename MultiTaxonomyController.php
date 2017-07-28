@@ -32,8 +32,11 @@ class MultiTaxonomyController extends FrameworkController
         Request $request,
         UserInterface $user,
         EngineInterface $templating,
-        AuthorizationCheckerInterface $AuthorizationChecker
-    ) //, Connection $conn)
+        AuthorizationCheckerInterface $AuthorizationChecker,
+        RaphiaDBAL $model
+        // TODO: use an interface
+        // https://symfony.com/doc/master/service_container.html#the-autowire-option
+    )
     // http://symfony.com/doc/current/doctrine/dbal.html
     {
         // if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
@@ -56,10 +59,10 @@ class MultiTaxonomyController extends FrameworkController
         //         ->getManyToManyWhereTraversable('taxonomy_tree', 'uuid', 'taxonomy_tree_uuid', 'link_taxonomy_tree_user', 'user_uuid', 'uuid', 'user', ['uuid' => $user->getId()]),
         // ]);
         // dump('index action');
-        $conn = $this->container->get('database_connection');
+        // $conn = $this->container->get('database_connection');
         return new Response($templating->render('@MultiTaxonomyDbalUtilBundle/index.html.twig', [ // why not a @string related to controller package?
-            'terms' => $this
-                ->container->get('raphia_model')
+            'terms' => $model
+                // ->container->get('raphia_model')
                 ->getManyToManyWherePager('taxonomy_tree', 'uuid',
                     'taxonomy_tree_uuid', 'link_taxonomy_tree_user', 'user_uuid',
                     // 'uuid', $conn->quoteIdentifier('user'), ['uuid' => $user->getId()], 'base.term')
