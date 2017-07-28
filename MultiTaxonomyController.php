@@ -104,7 +104,10 @@ class MultiTaxonomyController extends FrameworkController
         // $form = $this->createForm(Form::class);
         // $form = $this->container->get('form.factory')->create(URLForm::class);
         $form = $formFactory->create(URLForm::class);
+        dump(URLForm::class);
+        dump($form);
         $form->handleRequest($request);
+        dump($form);
         
         if ($form->isSubmitted() && $form->isValid()) {
             // => do something for allowing to enter synonyms
