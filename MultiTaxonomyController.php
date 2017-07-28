@@ -89,8 +89,9 @@ class MultiTaxonomyController extends FrameworkController
         Request $request, // used by form
         UserInterface $user,
         AuthorizationCheckerInterface $AuthorizationChecker,
-        FormFactoryInterface $formFactory,
+        UrlGeneratorInterface $urlGenerator,
         \RaphiaDBAL $model,
+        FormFactoryInterface $formFactory,
         EngineInterface $templating
     )
     {
@@ -120,7 +121,7 @@ class MultiTaxonomyController extends FrameworkController
                 'user_uuid' => $user->getId(),
             ], $user->getId(), $taxonomy_tree_uuid);
 
-            return new RedirectResponse('taxonomy_show', ['uuid' => $taxonomy_tree_uuid]); // TODO: look for PSR7 equivalent
+            return new RedirectResponse($urlGenerator->generate('taxonomy_show', ['uuid' => $taxonomy_tree_uuid])); // TODO: look for PSR7 equivalent
         }
 
         return new Response($templating->render('@MultiTaxonomyDbalUtilBundle/new.html.twig', [
@@ -149,8 +150,8 @@ class MultiTaxonomyController extends FrameworkController
         // UserInterface $user,
         // AuthorizationCheckerInterface $AuthorizationChecker,
         UrlGeneratorInterface $urlGenerator,
-        FormFactoryInterface $formFactory,
         \RaphiaDBAL $model,
+        FormFactoryInterface $formFactory,
         EngineInterface $templating
     )
     // public function editAction(Request $request, URL $uRL)
@@ -195,8 +196,8 @@ class MultiTaxonomyController extends FrameworkController
         Request $request,
         // UserInterface $user,
         // AuthorizationCheckerInterface $AuthorizationChecker,
-        FormFactoryInterface $formFactory,
         \RaphiaDBAL $model,
+        FormFactoryInterface $formFactory,
         EngineInterface $templating
     )
     {
@@ -249,8 +250,9 @@ class MultiTaxonomyController extends FrameworkController
     public function deleteAction(
         $uuid,
         Request $request,
-        FormFactoryInterface $formFactory,
-        \RaphiaDBAL $model
+        UrlGeneratorInterface $urlGenerator,
+        \RaphiaDBAL $model,
+        FormFactoryInterface $formFactory
     )
     {
         // TODO: authorization
@@ -265,7 +267,7 @@ class MultiTaxonomyController extends FrameworkController
             $model->deleteByUnique('taxonomy_tree', ['uuid' => $uuid]);
         }
 
-        return $this->redirectToRoute('taxonomy_index');
+        return new RedirectResponse($urlGenerator->generate('taxonomy_index'));
     }
     // SELECT CASE EXISTS (SELECT * FROM owned_url WHERE url_uuid = $uRL['url_uuid'])
     //     WHEN false THEN (DELETE url WHERE uuid = $uRL['url_uuid'])
