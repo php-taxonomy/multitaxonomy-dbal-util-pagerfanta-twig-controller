@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller as FrameworkController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
     // New in version 3.2: The functionality to get the user via the method signature was introduced in Symfony 3.2. You can still retrieve it by calling $this->getUser() if you extend the Controller class.
     // http://symfony.com/doc/current/security.html#retrieving-the-user-object
@@ -27,10 +28,17 @@ class MultiTaxonomyController extends FrameworkController
      * @Route("/", name="taxonomy_index")
      * @Method("GET")
      */
-    public function indexAction(Request $request, UserInterface $user, EngineInterface $templating) //, Connection $conn)
+    public function indexAction(
+        Request $request,
+        UserInterface $user,
+        EngineInterface $templating,
+        AuthorizationCheckerInterface $AuthorizationChecker
+    ) //, Connection $conn)
     // http://symfony.com/doc/current/doctrine/dbal.html
     {
-        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+        // if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+        if (!$AuthorizationChecker->isGranted('IS_AUTHENTICATED_FULLY')) {
+            // This test may be useless as long as UserInterface is a required argument of the controller indexAction.
             throw $this->createAccessDeniedException();
         }
         //^ http://symfony.com/doc/current/security.html#checking-to-see-if-a-user-is-logged-in-is-authenticated-fully
