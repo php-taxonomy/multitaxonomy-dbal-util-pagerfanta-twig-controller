@@ -57,7 +57,7 @@ class MultiTaxonomyController extends FrameworkController
         // ]);
         // dump('index action');
         $conn = $this->container->get('database_connection');
-        return new Response($templating->render('@MultiTaxonomyDbalUtilBundle/index.html.twig', [
+        return new Response($templating->render('@MultiTaxonomyDbalUtilBundle/index.html.twig', [ // why not a @string related to controller package?
             'terms' => $this
                 ->container->get('raphia_model')
                 ->getManyToManyWherePager('taxonomy_tree', 'uuid',
