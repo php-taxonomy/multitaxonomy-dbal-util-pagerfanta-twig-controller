@@ -7,6 +7,8 @@ namespace PhpTaxonomy\MultiTaxonomy\DbalUtil\Pagerfanta\Twig\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller as FrameworkController;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -29,13 +31,15 @@ class MultiTaxonomyController extends FrameworkController
      * @Method("GET")
      */
     public function indexAction(
-        Request $request,
+        Request $request, // used by pager
+        // TODO: use PSR7
+        // http://symfony.com/blog/psr-7-support-in-symfony-is-here
         UserInterface $user,
-        EngineInterface $templating,
         AuthorizationCheckerInterface $AuthorizationChecker,
-        \RaphiaDBAL $model
+        \RaphiaDBAL $model,
         // TODO: use an interface
         // https://symfony.com/doc/master/service_container.html#the-autowire-option
+        EngineInterface $templating
     )
     // http://symfony.com/doc/current/doctrine/dbal.html
     {
@@ -79,16 +83,25 @@ class MultiTaxonomyController extends FrameworkController
      * @Route("/new", name="taxonomy_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request, UserInterface $user)
+    public function newAction(
+        Request $request, // used by form
+        UserInterface $user,
+        AuthorizationCheckerInterface $AuthorizationChecker,
+        FormFactoryInterface $formFactory,
+        \RaphiaDBAL $model,
+        EngineInterface $templating
+    )
     {
-        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+        if (!$AuthorizationChecker->isGranted('IS_AUTHENTICATED_FULLY')) {
+            // This test may be useless as long as UserInterface is a required argument of the controller indexAction.
             throw $this->createAccessDeniedException();
         }
 
-        $model = $this->container->get('raphia_model');
+        // $model = $this->container->get('raphia_model');
 
-        $form = $this->createForm(Form::class);
+        // $form = $this->createForm(Form::class);
         // $form = $this->container->get('form.factory')->create(URLForm::class);
+        $form = $formFactory->create(URLForm::class);
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {
@@ -102,12 +115,12 @@ class MultiTaxonomyController extends FrameworkController
                 'user_uuid' => $user->getId(),
             ], $user->getId(), $taxonomy_tree_uuid);
 
-            return $this->redirectToRoute('taxonomy_show', ['uuid' => $taxonomy_tree_uuid]);
+            return new RedirectResponse('taxonomy_show', ['uuid' => $taxonomy_tree_uuid]); // TODO: look for PSR7 equivalent
         }
 
-        return $this->render('@MultiTaxonomyDbalUtilBundle/new.html.twig', [
+        return new Response($templating->render('@MultiTaxonomyDbalUtilBundle/new.html.twig', [
             'form' => $form->createView(),
-        ]);
+        ]));
     }
     // SELECT CASE EXISTS (SELECT uuid FROM url WHERE url = 'http://php.net/')
     //     WHEN false THEN (INSERT INTO url (uuid, url) VALUES (uuid_generate_v5(uuid_ns_url(), 'http://php.net/'), 'http://php.net/') RETURNING uuid)
@@ -125,30 +138,38 @@ class MultiTaxonomyController extends FrameworkController
      * @Route("/edit/{uuid}", name="taxonomy_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, $uuid)
+    public function editAction(
+        $uuid,
+        Request $request, // used by form
+        // UserInterface $user,
+        // AuthorizationCheckerInterface $AuthorizationChecker,
+        FormFactoryInterface $formFactory,
+        \RaphiaDBAL $model,
+        EngineInterface $templating
+    )
     // public function editAction(Request $request, URL $uRL)
     {
         $uuida = ['uuid' => $uuid];
-        $model = $this->container->get('raphia_model');
+        // $model = $this->container->get('raphia_model');
         $taxonomyTree = $model->getByUnique('taxonomy_tree', $uuida);
         // $uRL = ['url' => $model->getByUnique('url', ['uuid' => $uRL['url_uuid']])['url']];
 
-        $deleteForm = $this->createDeleteForm($taxonomyTree);
-        $editForm = $this->createForm(Form::class, $taxonomyTree);
+        $deleteForm = $this->createDeleteForm($taxonomyTree, $formFactory);
+        $editForm = $formFactory->createForm(Form::class, $taxonomyTree);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $to_update = $editForm->getData(); // TODO: SECURITY review everythere, the possibility of abuse, by changing important fields like id!
             $model->updateByUnique('taxonomy_tree', $uuida, ['term' => $to_update['term']]);
 
-            return $this->redirectToRoute('taxonomy_show', $uuida);
+            return new RedirectResponse('taxonomy_show', $uuida);
         }
 
-        return $this->render('@MultiTaxonomyDbalUtilBundle/edit.html.twig', array(
+        return new Response($templating->render('@MultiTaxonomyDbalUtilBundle/edit.html.twig', array(
             'term' => $taxonomyTree,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-        ));
+        )));
     }
     // if ($uRL['url_uuid'] <> $url_uuid):
     // SELECT CASE EXISTS (SELECT * FROM owned_url WHERE url_uuid = $uRL['url_uuid'])
@@ -163,15 +184,23 @@ class MultiTaxonomyController extends FrameworkController
      * @Route("/{uuid}", name="taxonomy_show")
      * @Method("GET")
      */
-    public function showAction(Request $request, $uuid)
+    public function showAction(
+        $uuid,
+        Request $request,
+        // UserInterface $user,
+        // AuthorizationCheckerInterface $AuthorizationChecker,
+        FormFactoryInterface $formFactory,
+        \RaphiaDBAL $model,
+        EngineInterface $templating
+    )
     {
-        $model = $this->container->get('raphia_model');
+        // $model = $this->container->get('raphia_model');
         $taxonomyTree = $model->getByUnique('taxonomy_tree', ['uuid' => $uuid]);
 
         // $this->denyAccessUnlessGranted('view', $uRL);!!!!!!!!!!!!!!!!
         //^ TODO: SECURITY AUTHORIZATION
 
-        $deleteForm = $this->createDeleteForm($taxonomyTree);
+        $deleteForm = $this->createDeleteForm($taxonomyTree, $formFactory);
         
         //dump($taxonomyTree);
         //dump($request->query->getInt('page', 1));
@@ -186,10 +215,10 @@ class MultiTaxonomyController extends FrameworkController
                     //'link_owned_url_taxonomy', 'url_uuid', 'uuid', 'owned_url', 'url_uuid', 'uuid', 'url',
                     //['uuid' => $taxonomyTree['synonym_uuid']]));
 
-        return $this->render('@MultiTaxonomyDbalUtilBundle/show.html.twig', [
+        return new Response($templating->render('@MultiTaxonomyDbalUtilBundle/show.html.twig', [
             'term' => $taxonomyTree,
-            'uRLs' => $this
-                ->container->get('raphia_model')
+            'uRLs' => $model
+                // ->container->get('raphia_model')
                 // ->getMoreManyToManyWherePager('url', 'uuid', 'url_uuid',
                 //     'owned_url', 'uuid', 'owned_url_uuid',
                 //     'link_owned_url_user', 'user_uuid', 'uuid', 'user',
@@ -201,7 +230,7 @@ class MultiTaxonomyController extends FrameworkController
                 ->setMaxPerPage(100)
                 ->setCurrentPage($request->query->getInt('page', 1)),
             'delete_form' => $deleteForm->createView(),
-        ]);
+        ]));
     }
 
 
@@ -211,14 +240,19 @@ class MultiTaxonomyController extends FrameworkController
      * @Route("/{uuid}", name="taxonomy_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, $uuid)
+    public function deleteAction(
+        $uuid,
+        Request $request,
+        FormFactoryInterface $formFactory,
+        \RaphiaDBAL $model
+    )
     {
         // TODO: authorization
         
         $model = $this->container->get('raphia_model');
         $taxonomyTree = $model->getByUnique('taxonomy_tree', ['uuid' => $uuid]);
 
-        $form = $this->createDeleteForm($taxonomyTree);
+        $form = $this->createDeleteForm($taxonomyTree, $formFactory);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -243,9 +277,12 @@ class MultiTaxonomyController extends FrameworkController
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(array $taxonomyTree)
+    private function createDeleteForm(
+        array $taxonomyTree,
+        FormFactoryInterface $formFactory,
+    )
     {
-        return $this->createFormBuilder()
+        return $formFactory->createFormBuilder()
             ->setAction($this->generateUrl('taxonomy_delete', $taxonomyTree))
             ->setMethod('DELETE')
             ->getForm()
