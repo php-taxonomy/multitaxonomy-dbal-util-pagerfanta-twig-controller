@@ -294,7 +294,7 @@ class MultiTaxonomyController // extends FrameworkAbstractController
     )
     {
         return $formFactory->createBuilder()
-            ->setAction($urlGenerator->generateUrl('taxonomy_delete', $taxonomyTree))
+            ->setAction($urlGenerator->generate('taxonomy_delete', $taxonomyTree))
             ->setMethod('DELETE')
             ->getForm()
         ;
