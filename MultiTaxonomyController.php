@@ -283,7 +283,7 @@ class MultiTaxonomyController extends FrameworkController
         FormFactoryInterface $formFactory
     )
     {
-        return $formFactory->createFormBuilder()
+        return $formFactory->createBuilder()
             ->setAction($this->generateUrl('taxonomy_delete', $taxonomyTree))
             ->setMethod('DELETE')
             ->getForm()
