@@ -3,7 +3,7 @@
 namespace PhpTaxonomy\MultiTaxonomy\DbalUtil\Pagerfanta\Twig\Controller;
 
 // use AppBundle\Form\TaxonomyForm;
-use AppBundle\Form\URLForm; // Bad dependency to remove
+// use AppBundle\Form\URLForm; // Bad dependency to remove -> error
 // use Doctrine\DBAL\Driver\Connection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -102,12 +102,12 @@ class MultiTaxonomyController extends FrameworkController
         // $model = $this->container->get('raphia_model');
 
         // $form = $this->createForm(Form::class);
-        // $form = $this->container->get('form.factory')->create(URLForm::class);
-        $form = $formFactory->create(URLForm::class);
-        dump(URLForm::class);
-        dump($form);
+        // $form = $this->container->get('form.factory')->create(Form::class);
+        $form = $formFactory->create(Form::class);
+        // dump(URLForm::class);
+        // dump($form);
         $form->handleRequest($request);
-        dump($form);
+        // dump($form);
         
         if ($form->isSubmitted() && $form->isValid()) {
             // => do something for allowing to enter synonyms
