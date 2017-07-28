@@ -156,7 +156,7 @@ class MultiTaxonomyController extends FrameworkController
         // $uRL = ['url' => $model->getByUnique('url', ['uuid' => $uRL['url_uuid']])['url']];
 
         $deleteForm = $this->createDeleteForm($taxonomyTree, $formFactory);
-        $editForm = $formFactory->createForm(Form::class, $taxonomyTree);
+        $editForm = $formFactory->create(Form::class, $taxonomyTree);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
