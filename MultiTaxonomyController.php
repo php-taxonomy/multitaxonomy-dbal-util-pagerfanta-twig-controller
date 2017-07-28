@@ -165,7 +165,7 @@ class MultiTaxonomyController extends FrameworkController
             $to_update = $editForm->getData(); // TODO: SECURITY review everythere, the possibility of abuse, by changing important fields like id!
             $model->updateByUnique('taxonomy_tree', $uuida, ['term' => $to_update['term']]);
 
-            return new RedirectResponse($urlGenerator->generate('taxonomy_show'), $uuida);
+            return new RedirectResponse($urlGenerator->generate('taxonomy_show', $uuida));
         }
 
         return new Response($templating->render('@MultiTaxonomyDbalUtilBundle/edit.html.twig', array(
