@@ -3,6 +3,7 @@
 namespace PhpTaxonomy\MultiTaxonomy\DbalUtil\Pagerfanta\Twig\Controller;
 
 // use AppBundle\Form\TaxonomyForm;
+use AppBundle\Form\URLForm; // Bad dependency to remove
 // use Doctrine\DBAL\Driver\Connection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
