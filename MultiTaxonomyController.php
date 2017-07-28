@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
     // New in version 3.2: The functionality to get the user via the method signature was introduced in Symfony 3.2. You can still retrieve it by calling $this->getUser() if you extend the Controller class.
     // http://symfony.com/doc/current/security.html#retrieving-the-user-object
@@ -48,7 +49,7 @@ class MultiTaxonomyController extends FrameworkAbstractController
         // if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
         if (!$AuthorizationChecker->isGranted('IS_AUTHENTICATED_FULLY')) {
             // This test may be useless as long as UserInterface is a required argument of the controller indexAction.
-            throw $this->createAccessDeniedException();
+            throw new AccessDeniedException();
         }
         //^ http://symfony.com/doc/current/security.html#checking-to-see-if-a-user-is-logged-in-is-authenticated-fully
 
@@ -97,7 +98,7 @@ class MultiTaxonomyController extends FrameworkAbstractController
     {
         if (!$AuthorizationChecker->isGranted('IS_AUTHENTICATED_FULLY')) {
             // This test may be useless as long as UserInterface is a required argument of the controller indexAction.
-            throw $this->createAccessDeniedException();
+            throw new AccessDeniedException();
         }
 
         // $model = $this->container->get('raphia_model');
@@ -161,7 +162,7 @@ class MultiTaxonomyController extends FrameworkAbstractController
         $taxonomyTree = $model->getByUnique('taxonomy_tree', $uuida);
         // $uRL = ['url' => $model->getByUnique('url', ['uuid' => $uRL['url_uuid']])['url']];
 
-        $deleteForm = $this->createDeleteForm($taxonomyTree, $formFactory);
+        $deleteForm = $this->createDeleteForm($taxonomyTree, $urlGenerator, $formFactory);
         $editForm = $formFactory->create(Form::class, $taxonomyTree);
         $editForm->handleRequest($request);
 
@@ -196,6 +197,7 @@ class MultiTaxonomyController extends FrameworkAbstractController
         Request $request,
         // UserInterface $user,
         // AuthorizationCheckerInterface $AuthorizationChecker,
+        UrlGeneratorInterface $urlGenerator,
         \RaphiaDBAL $model,
         FormFactoryInterface $formFactory,
         EngineInterface $templating
@@ -207,7 +209,7 @@ class MultiTaxonomyController extends FrameworkAbstractController
         // $this->denyAccessUnlessGranted('view', $uRL);!!!!!!!!!!!!!!!!
         //^ TODO: SECURITY AUTHORIZATION
 
-        $deleteForm = $this->createDeleteForm($taxonomyTree, $formFactory);
+        $deleteForm = $this->createDeleteForm($taxonomyTree, $urlGenerator, $formFactory);
         
         //dump($taxonomyTree);
         //dump($request->query->getInt('page', 1));
@@ -257,10 +259,10 @@ class MultiTaxonomyController extends FrameworkAbstractController
     {
         // TODO: authorization
         
-        $model = $this->container->get('raphia_model');
+        // $model = $this->container->get('raphia_model');
         $taxonomyTree = $model->getByUnique('taxonomy_tree', ['uuid' => $uuid]);
 
-        $form = $this->createDeleteForm($taxonomyTree, $formFactory);
+        $form = $this->createDeleteForm($taxonomyTree, $urlGenerator, $formFactory);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -287,11 +289,12 @@ class MultiTaxonomyController extends FrameworkAbstractController
      */
     private function createDeleteForm(
         array $taxonomyTree,
+        UrlGeneratorInterface $urlGenerator,
         FormFactoryInterface $formFactory
     )
     {
         return $formFactory->createBuilder()
-            ->setAction($this->generateUrl('taxonomy_delete', $taxonomyTree))
+            ->setAction($urlGenerator->generateUrl('taxonomy_delete', $taxonomyTree))
             ->setMethod('DELETE')
             ->getForm()
         ;
