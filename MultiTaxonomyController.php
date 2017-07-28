@@ -12,6 +12,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
     // New in version 3.2: The functionality to get the user via the method signature was introduced in Symfony 3.2. You can still retrieve it by calling $this->getUser() if you extend the Controller class.
@@ -144,6 +145,7 @@ class MultiTaxonomyController extends FrameworkController
         Request $request, // used by form
         // UserInterface $user,
         // AuthorizationCheckerInterface $AuthorizationChecker,
+        UrlGeneratorInterface $urlGenerator,
         FormFactoryInterface $formFactory,
         \RaphiaDBAL $model,
         EngineInterface $templating
