@@ -35,8 +35,13 @@ class MultiTaxonomyController // extends FrameworkAbstractController
      */
     public function indexAction(
         Request $request, // used by pager
-        // TODO: use PSR7
+        // TODO: use PSR7 when ready in Symfony
         // http://symfony.com/blog/psr-7-support-in-symfony-is-here
+        // Symfony 3.3 PSR7 needs https://phppackages.org/p/sensio/framework-extra-bundle
+        // framework-extra-bundle requires symfony/framework-bundle which requires a lot of dependencies.
+        // also it is just a converter based on https://phppackages.org/p/zendframework/zend-diactoros
+        // internally http-fundation Request is still used
+        // This page may contain updates on evolution https://symfony.com/doc/master/request/psr7.html
         UserInterface $user,
         AuthorizationCheckerInterface $AuthorizationChecker,
         \RaphiaDBAL $model,
