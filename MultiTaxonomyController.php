@@ -43,6 +43,7 @@ class MultiTaxonomyController // extends FrameworkAbstractController
         // internally http-fundation Request is still used
         // This page may contain updates on evolution https://symfony.com/doc/master/request/psr7.html
         // https://symfony.com/doc/current/controller/argument_value_resolver.html
+        // https://symfony.com/doc/master/service_container/alias_private.html#services-why-private
         UserInterface $user,
         AuthorizationCheckerInterface $AuthorizationChecker,
         \RaphiaDBAL $model,
