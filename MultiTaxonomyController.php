@@ -46,6 +46,9 @@ class MultiTaxonomyController // extends FrameworkAbstractController
         // https://symfony.com/doc/master/service_container/alias_private.html#services-why-private
         // https://dunglas.fr/2015/06/using-psr-7-in-symfony/
         // https://wiki.php.net/rfc/immutability // PHP 7.2 ?
+        // https://github.com/php-fig/fig-standards/tree/master/proposed/http-factory
+        // https://github.com/php-fig/fig-standards/tree/master/proposed/http-middleware
+        // https://github.com/http-interop
         UserInterface $user,
         AuthorizationCheckerInterface $AuthorizationChecker,
         \RaphiaDBAL $model,
