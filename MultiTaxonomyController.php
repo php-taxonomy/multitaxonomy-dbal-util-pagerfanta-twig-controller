@@ -42,6 +42,7 @@ class MultiTaxonomyController // extends FrameworkAbstractController
         // also it is just a converter based on https://phppackages.org/p/zendframework/zend-diactoros
         // internally http-fundation Request is still used
         // This page may contain updates on evolution https://symfony.com/doc/master/request/psr7.html
+        // https://symfony.com/doc/current/controller/argument_value_resolver.html
         UserInterface $user,
         AuthorizationCheckerInterface $AuthorizationChecker,
         \RaphiaDBAL $model,
