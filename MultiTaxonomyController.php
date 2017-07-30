@@ -44,6 +44,8 @@ class MultiTaxonomyController // extends FrameworkAbstractController
         // This page may contain updates on evolution https://symfony.com/doc/master/request/psr7.html
         // https://symfony.com/doc/current/controller/argument_value_resolver.html
         // https://symfony.com/doc/master/service_container/alias_private.html#services-why-private
+        // https://dunglas.fr/2015/06/using-psr-7-in-symfony/
+        // https://wiki.php.net/rfc/immutability // PHP 7.2 ?
         UserInterface $user,
         AuthorizationCheckerInterface $AuthorizationChecker,
         \RaphiaDBAL $model,
