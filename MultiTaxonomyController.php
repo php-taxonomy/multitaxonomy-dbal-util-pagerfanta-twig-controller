@@ -5,20 +5,28 @@ namespace PhpTaxonomy\MultiTaxonomy\DbalUtil\Pagerfanta\Twig\Controller;
 // use AppBundle\Form\TaxonomyForm;
 // use AppBundle\Form\URLForm; // Bad dependency to remove -> error
 // use Doctrine\DBAL\Driver\Connection;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+// use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+// use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+// "sensio/framework-extra-bundle":"^3.0 || ^4.0",
 // use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as FrameworkAbstractController;
+
 use Symfony\Component\Form\FormFactoryInterface;
+
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
     // New in version 3.2: The functionality to get the user via the method signature was introduced in Symfony 3.2. You can still retrieve it by calling $this->getUser() if you extend the Controller class.
     // http://symfony.com/doc/current/security.html#retrieving-the-user-object
+
 use Symfony\Component\Templating\EngineInterface;
+
+// TODO: Investgate Twig dependency "symfony/twig-bundle": "^2.7 || ^3.0 || ^4.0"
 
 /**
  * Default controller.
