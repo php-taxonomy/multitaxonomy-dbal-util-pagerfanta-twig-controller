@@ -17,3 +17,24 @@ $routes->import(
 */
 ```
 Annotation may need the controllers to be inside of a directory named Controller, like in a Symfony bundle.
+
+### TODO better model
+        // TODO: use an interface
+        // https://symfony.com/doc/master/service_container.html#the-autowire-option
+
+###  TODO PSR-7 in a long time
+        // TODO: use PSR7 when ready in Symfony
+        // http://symfony.com/blog/psr-7-support-in-symfony-is-here
+        // Symfony 3.3 PSR7 needs https://phppackages.org/p/sensio/framework-extra-bundle
+        // framework-extra-bundle requires symfony/framework-bundle which requires a lot of dependencies.
+        // also it is just a converter based on https://phppackages.org/p/zendframework/zend-diactoros
+        // internally http-fundation Request is still used
+        // This page may contain updates on evolution https://symfony.com/doc/master/request/psr7.html
+        // https://symfony.com/doc/current/controller/argument_value_resolver.html
+        // https://symfony.com/doc/master/service_container/alias_private.html#services-why-private
+        // https://dunglas.fr/2015/06/using-psr-7-in-symfony/
+        // https://wiki.php.net/rfc/immutability // PHP 7.2 ?
+        // https://github.com/php-fig/fig-standards/tree/master/proposed/http-factory
+        // https://github.com/php-fig/fig-standards/tree/master/proposed/http-middleware
+        // https://github.com/http-interop
+Be ready to redirect or forward responses
