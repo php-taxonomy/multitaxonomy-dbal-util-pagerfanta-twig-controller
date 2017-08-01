@@ -2,13 +2,9 @@
 
 namespace PhpTaxonomy\MultiTaxonomy\DbalUtil\Pagerfanta\Twig\Controller;
 
-// use AppBundle\Form\TaxonomyForm;
-// use AppBundle\Form\URLForm; // Bad dependency to remove -> error
-// use Doctrine\DBAL\Driver\Connection;
 // use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 // use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 // "sensio/framework-extra-bundle":"^3.0 || ^4.0",
-// use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as FrameworkAbstractController;
 
 use Symfony\Component\Form\FormFactoryInterface;
 
@@ -25,7 +21,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
     // http://symfony.com/doc/current/security.html#retrieving-the-user-object
 
 use Symfony\Component\Templating\EngineInterface;
-
 // TODO: Investgate Twig dependency "symfony/twig-bundle": "^2.7 || ^3.0 || ^4.0"
 
 /**
@@ -43,59 +38,15 @@ class MultiTaxonomyController // extends FrameworkAbstractController
      */
     public function indexAction(
         Request $request, // used by pager
-        // TODO: use PSR7 when ready in Symfony
-        // http://symfony.com/blog/psr-7-support-in-symfony-is-here
-        // Symfony 3.3 PSR7 needs https://phppackages.org/p/sensio/framework-extra-bundle
-        // framework-extra-bundle requires symfony/framework-bundle which requires a lot of dependencies.
-        // also it is just a converter based on https://phppackages.org/p/zendframework/zend-diactoros
-        // internally http-fundation Request is still used
-        // This page may contain updates on evolution https://symfony.com/doc/master/request/psr7.html
-        // https://symfony.com/doc/current/controller/argument_value_resolver.html
-        // https://symfony.com/doc/master/service_container/alias_private.html#services-why-private
-        // https://dunglas.fr/2015/06/using-psr-7-in-symfony/
-        // https://wiki.php.net/rfc/immutability // PHP 7.2 ?
-        // https://github.com/php-fig/fig-standards/tree/master/proposed/http-factory
-        // https://github.com/php-fig/fig-standards/tree/master/proposed/http-middleware
-        // https://github.com/http-interop
         UserInterface $user,
-        AuthorizationCheckerInterface $AuthorizationChecker,
         \RaphiaDBAL $model,
-        // TODO: use an interface
-        // https://symfony.com/doc/master/service_container.html#the-autowire-option
         EngineInterface $templating
     )
-    // http://symfony.com/doc/current/doctrine/dbal.html
     {
-        // if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
-        if (!$AuthorizationChecker->isGranted('IS_AUTHENTICATED_FULLY')) {
-            // This test may be useless as long as UserInterface is a required argument of the controller indexAction.
-            // http://symfony.com/doc/current/security.html#always-check-if-the-user-is-logged-in
-            // http://symfony.com/doc/current/security.html#add-code-to-deny-access
-            // with this or http://symfony.com/doc/current/security.html#securing-url-patterns-access-control
-            throw new AccessDeniedException();
-        }
-        //^ http://symfony.com/doc/current/security.html#checking-to-see-if-a-user-is-logged-in-is-authenticated-fully
-
-        // $this
-        //         ->container->get('raphia_model')
-        //         ->getManyToManyWherePager('taxonomy_tree', 'uuid', 'taxonomy_tree_uuid', 'link_taxonomy_tree_user', 'user_uuid', 'uuid', 'user', ['uuid' => $user->getId()])
-        //         ->setMaxPerPage(2)
-        //         ->setCurrentPage($request->query->getInt('page', 1))
-        // ;
-
-        // return $this->render('@MultiTaxonomyDbalUtilBundle/index.html.twig', [
-        //     'terms' => $this
-        //         ->container->get('raphia_model')
-        //         ->getManyToManyWhereTraversable('taxonomy_tree', 'uuid', 'taxonomy_tree_uuid', 'link_taxonomy_tree_user', 'user_uuid', 'uuid', 'user', ['uuid' => $user->getId()]),
-        // ]);
-        // dump('index action');
-        // $conn = $this->container->get('database_connection');
         return new Response($templating->render('@MultiTaxonomyDbalUtilBundle/index.html.twig', [ // why not a @string related to controller package?
             'terms' => $model
-                // ->container->get('raphia_model')
                 ->getManyToManyWherePager('taxonomy_tree', 'uuid',
                     'taxonomy_tree_uuid', 'link_taxonomy_tree_user', 'user_uuid',
-                    // 'uuid', $conn->quoteIdentifier('user'), ['uuid' => $user->getId()], 'base.term')
                     'uuid', 'http_user', ['uuid' => $user->getId()], 'base.term')
                 ->setMaxPerPage(2) // 100
                 ->setCurrentPage($request->query->getInt('page', 1))
@@ -103,6 +54,7 @@ class MultiTaxonomyController // extends FrameworkAbstractController
         ]));
     }
 
+    
     /**
      * Creates a new taxonomy entity.
      *
@@ -112,54 +64,33 @@ class MultiTaxonomyController // extends FrameworkAbstractController
     public function newAction(
         Request $request, // used by form
         UserInterface $user,
-        AuthorizationCheckerInterface $AuthorizationChecker,
         UrlGeneratorInterface $urlGenerator,
         \RaphiaDBAL $model,
         FormFactoryInterface $formFactory,
         EngineInterface $templating
     )
     {
-        if (!$AuthorizationChecker->isGranted('IS_AUTHENTICATED_FULLY')) {
-            // This test may be useless as long as UserInterface is a required argument of the controller indexAction.
-            throw new AccessDeniedException();
-        }
-
-        // $model = $this->container->get('raphia_model');
-
-        // $form = $this->createForm(Form::class);
-        // $form = $this->container->get('form.factory')->create(Form::class);
         $form = $formFactory->create(Form::class);
-        // dump(URLForm::class);
-        // dump($form);
         $form->handleRequest($request);
-        // dump($form);
-        
+
         if ($form->isSubmitted() && $form->isValid()) {
             // => do something for allowing to enter synonyms
             $taxonomy_leaf = $model->insert_default_values_returning_uuid('taxonomy_leaf');
             $to_insert = $form->getData();
-            $to_insert['synonym_uuid'] = $taxonomy_leaf['uuid']; // $model->lastInsertId('taxonomy_id_seq'); // TODO: specific to Postgres
+            $to_insert['synonym_uuid'] = $taxonomy_leaf['uuid'];
             $taxonomy_tree_uuid = $model->insert_returning_uuid('taxonomy_tree', $to_insert)['uuid'];
             $model->namespace_insert('link_taxonomy_tree_user', [
                 'taxonomy_tree_uuid' => $taxonomy_tree_uuid,
                 'user_uuid' => $user->getId(),
             ], $user->getId(), $taxonomy_tree_uuid);
 
-            return new RedirectResponse($urlGenerator->generate('taxonomy_show', ['uuid' => $taxonomy_tree_uuid])); // TODO: look for PSR7 equivalent
+            return new RedirectResponse($urlGenerator->generate('taxonomy_show', ['uuid' => $taxonomy_tree_uuid]));
         }
 
         return new Response($templating->render('@MultiTaxonomyDbalUtilBundle/new.html.twig', [
             'form' => $form->createView(),
         ]));
     }
-    // SELECT CASE EXISTS (SELECT uuid FROM url WHERE url = 'http://php.net/')
-    //     WHEN false THEN (INSERT INTO url (uuid, url) VALUES (uuid_generate_v5(uuid_ns_url(), 'http://php.net/'), 'http://php.net/') RETURNING uuid)
-    //     WHEN true  THEN (SELECT uuid FROM url WHERE url = 'http://php.net/')
-    //     ELSE (INSERT INTO url (uuid, url) VALUES (uuid_generate_v5(uuid_ns_url(), 'http://php.net/'), 'http://php.net/') RETURNING uuid)
-    // END;
-    
-    // INSERT INTO url (uuid, url) VALUES (uuid_generate_v5(uuid_ns_url(), 'http://php.net/'), 'http://php.net/')
-    //     ON CONFLICT (uuid) DO NOTHING RETURNING uuid;
 
 
     /**
@@ -171,19 +102,14 @@ class MultiTaxonomyController // extends FrameworkAbstractController
     public function editAction(
         $uuid,
         Request $request, // used by form
-        // UserInterface $user,
-        // AuthorizationCheckerInterface $AuthorizationChecker,
         UrlGeneratorInterface $urlGenerator,
         \RaphiaDBAL $model,
         FormFactoryInterface $formFactory,
         EngineInterface $templating
     )
-    // public function editAction(Request $request, URL $uRL)
     {
         $uuida = ['uuid' => $uuid];
-        // $model = $this->container->get('raphia_model');
         $taxonomyTree = $model->getByUnique('taxonomy_tree', $uuida);
-        // $uRL = ['url' => $model->getByUnique('url', ['uuid' => $uRL['url_uuid']])['url']];
 
         $deleteForm = $this->createDeleteForm($taxonomyTree, $urlGenerator, $formFactory);
         $editForm = $formFactory->create(Form::class, $taxonomyTree);
@@ -202,11 +128,6 @@ class MultiTaxonomyController // extends FrameworkAbstractController
             'delete_form' => $deleteForm->createView(),
         )));
     }
-    // if ($uRL['url_uuid'] <> $url_uuid):
-    // SELECT CASE EXISTS (SELECT * FROM owned_url WHERE url_uuid = $uRL['url_uuid'])
-    //     WHEN false THEN (DELETE url WHERE uuid = $uRL['url_uuid'])
-    // END;
-    // To insert just before redirection
 
 
     /**
@@ -218,47 +139,23 @@ class MultiTaxonomyController // extends FrameworkAbstractController
     public function showAction(
         $uuid,
         Request $request,
-        // UserInterface $user,
-        // AuthorizationCheckerInterface $AuthorizationChecker,
         UrlGeneratorInterface $urlGenerator,
         \RaphiaDBAL $model,
         FormFactoryInterface $formFactory,
         EngineInterface $templating
     )
     {
-        // $model = $this->container->get('raphia_model');
         $taxonomyTree = $model->getByUnique('taxonomy_tree', ['uuid' => $uuid]);
-
-        // $this->denyAccessUnlessGranted('view', $uRL);!!!!!!!!!!!!!!!!
         //^ TODO: SECURITY AUTHORIZATION
 
         $deleteForm = $this->createDeleteForm($taxonomyTree, $urlGenerator, $formFactory);
         
-        //dump($taxonomyTree);
-        //dump($request->query->getInt('page', 1));
-        //dump($taxonomyTree['synonym_uuid']);
-        //dump($this
-                //->container->get('raphia_model')
-                //// ->getMoreManyToManyWherePager('url', 'uuid', 'url_uuid',
-                ////     'owned_url', 'uuid', 'owned_url_uuid',
-                ////     'link_owned_url_user', 'user_uuid', 'uuid', 'user',
-                ////     ['uuid' => $user->getId()])
-                //->getWhereManyToManyToManyPager('taxonomy_leaf', 'uuid', 'taxonomy_uuid',
-                    //'link_owned_url_taxonomy', 'url_uuid', 'uuid', 'owned_url', 'url_uuid', 'uuid', 'url',
-                    //['uuid' => $taxonomyTree['synonym_uuid']]));
-
         return new Response($templating->render('@MultiTaxonomyDbalUtilBundle/show.html.twig', [
             'term' => $taxonomyTree,
             'uRLs' => $model
-                // ->container->get('raphia_model')
-                // ->getMoreManyToManyWherePager('url', 'uuid', 'url_uuid',
-                //     'owned_url', 'uuid', 'owned_url_uuid',
-                //     'link_owned_url_user', 'user_uuid', 'uuid', 'user',
-                //     ['uuid' => $user->getId()])
                 ->getWhereManyToManyToManyPager('taxonomy_leaf', 'uuid', 'taxonomy_uuid',
                     'link_owned_url_taxonomy', 'owned_url_uuid', 'uuid', 'owned_url', 'url_uuid', 'uuid', 'url',
                     ['uuid' => $taxonomyTree['synonym_uuid']])
-                // getManyToManyTraversable('owned_url', 'uuid', 'url_uuid', 'link_owned_url_taxonomy', 'taxonomy_uuid', 'uuid', 'taxonomy_leaf', {uuid: uRL.uuid})
                 ->setMaxPerPage(100)
                 ->setCurrentPage($request->query->getInt('page', 1)),
             'delete_form' => $deleteForm->createView(),
@@ -282,7 +179,6 @@ class MultiTaxonomyController // extends FrameworkAbstractController
     {
         // TODO: authorization
         
-        // $model = $this->container->get('raphia_model');
         $taxonomyTree = $model->getByUnique('taxonomy_tree', ['uuid' => $uuid]);
 
         $form = $this->createDeleteForm($taxonomyTree, $urlGenerator, $formFactory);
@@ -294,13 +190,6 @@ class MultiTaxonomyController // extends FrameworkAbstractController
 
         return new RedirectResponse($urlGenerator->generate('taxonomy_index'));
     }
-    // SELECT CASE EXISTS (SELECT * FROM owned_url WHERE url_uuid = $uRL['url_uuid'])
-    //     WHEN false THEN (DELETE url WHERE uuid = $uRL['url_uuid'])
-    // END;
-    // PREPARE url_garbage_collect(uuid) AS
-    //     SELECT CASE EXISTS (SELECT * FROM owned_url WHERE url_uuid = $1)
-    //         WHEN false THEN (DELETE FROM url WHERE uuid = $1) -- syntax error near from
-    //     END;
     // Anyways one should implement deletion date field before really deleting...
 
     /**
