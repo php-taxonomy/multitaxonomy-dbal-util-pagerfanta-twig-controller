@@ -111,7 +111,7 @@ class MultiTaxonomyController // extends FrameworkAbstractController
         $uuida = ['uuid' => $uuid];
         $taxonomyTree = $model->getByUnique('taxonomy_tree', $uuida);
 
-        $deleteForm = $this->createDeleteForm($taxonomyTree, $urlGenerator, $formFactory);
+        $deleteForm = self::createDeleteForm($taxonomyTree, $urlGenerator, $formFactory);
         $editForm = $formFactory->create(Form::class, $taxonomyTree);
         $editForm->handleRequest($request);
 
@@ -148,7 +148,7 @@ class MultiTaxonomyController // extends FrameworkAbstractController
         $taxonomyTree = $model->getByUnique('taxonomy_tree', ['uuid' => $uuid]);
         //^ TODO: SECURITY AUTHORIZATION
 
-        $deleteForm = $this->createDeleteForm($taxonomyTree, $urlGenerator, $formFactory);
+        $deleteForm = self::createDeleteForm($taxonomyTree, $urlGenerator, $formFactory);
         
         return new Response($templating->render('@MultiTaxonomyDbalUtilBundle/show.html.twig', [
             'term' => $taxonomyTree,
@@ -181,7 +181,7 @@ class MultiTaxonomyController // extends FrameworkAbstractController
         
         $taxonomyTree = $model->getByUnique('taxonomy_tree', ['uuid' => $uuid]);
 
-        $form = $this->createDeleteForm($taxonomyTree, $urlGenerator, $formFactory);
+        $form = self::createDeleteForm($taxonomyTree, $urlGenerator, $formFactory);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -199,7 +199,7 @@ class MultiTaxonomyController // extends FrameworkAbstractController
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(
+    private static function createDeleteForm(
         array $taxonomyTree,
         UrlGeneratorInterface $urlGenerator,
         FormFactoryInterface $formFactory
