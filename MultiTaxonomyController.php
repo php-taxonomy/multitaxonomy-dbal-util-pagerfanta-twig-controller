@@ -23,14 +23,14 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Templating\EngineInterface;
 // TODO: Investgate Twig dependency "symfony/twig-bundle": "^2.7 || ^3.0 || ^4.0"
 
-/**
+/*
  * Default controller.
  *
  * @Route("taxonomy")
  */
 class MultiTaxonomyController // extends FrameworkAbstractController
 {
-    /**
+    /*
      * Lists all taxonomy tree entities.
      *
      * @Route("/", name="taxonomy_index")
@@ -55,7 +55,7 @@ class MultiTaxonomyController // extends FrameworkAbstractController
     }
 
     
-    /**
+    /*
      * Creates a new taxonomy entity.
      *
      * @Route("/new", name="taxonomy_new")
@@ -93,7 +93,7 @@ class MultiTaxonomyController // extends FrameworkAbstractController
     }
 
 
-    /**
+    /*
      * Displays a form to edit an existing taxonomy entity.
      *
      * @Route("/edit/{uuid}", name="taxonomy_edit")
@@ -130,7 +130,7 @@ class MultiTaxonomyController // extends FrameworkAbstractController
     }
 
 
-    /**
+    /*
      * Finds and displays a taxonomy entity.
      *
      * @Route("/{uuid}", name="taxonomy_show")
@@ -163,7 +163,7 @@ class MultiTaxonomyController // extends FrameworkAbstractController
     }
 
 
-    /**
+    /*
      * Deletes a taxonomy entity.
      *
      * @Route("/{uuid}", name="taxonomy_delete")
@@ -192,7 +192,7 @@ class MultiTaxonomyController // extends FrameworkAbstractController
     }
     // Anyways one should implement deletion date field before really deleting...
 
-    /**
+    /*
      * Creates a form to delete a uRL entity.
      *
      * @param array $uRL The uRL array
