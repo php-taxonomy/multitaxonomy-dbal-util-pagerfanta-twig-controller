@@ -36,7 +36,7 @@ class MultiTaxonomyController // extends FrameworkAbstractController
      * @Route("/", name="taxonomy_index")
      * @Method("GET")
      */
-    public function indexAction(
+    public static function indexAction(
         Request $request, // used by pager
         UserInterface $user,
         \RaphiaDBAL $model,
@@ -61,7 +61,7 @@ class MultiTaxonomyController // extends FrameworkAbstractController
      * @Route("/new", name="taxonomy_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(
+    public static function newAction(
         Request $request, // used by form
         UserInterface $user,
         UrlGeneratorInterface $urlGenerator,
@@ -99,7 +99,7 @@ class MultiTaxonomyController // extends FrameworkAbstractController
      * @Route("/edit/{uuid}", name="taxonomy_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(
+    public static function editAction(
         $uuid,
         Request $request, // used by form
         UrlGeneratorInterface $urlGenerator,
@@ -136,7 +136,7 @@ class MultiTaxonomyController // extends FrameworkAbstractController
      * @Route("/{uuid}", name="taxonomy_show")
      * @Method("GET")
      */
-    public function showAction(
+    public static function showAction(
         $uuid,
         Request $request,
         UrlGeneratorInterface $urlGenerator,
@@ -169,7 +169,7 @@ class MultiTaxonomyController // extends FrameworkAbstractController
      * @Route("/{uuid}", name="taxonomy_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(
+    public static function deleteAction(
         $uuid,
         Request $request,
         UrlGeneratorInterface $urlGenerator,
