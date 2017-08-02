@@ -22,6 +22,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 use Symfony\Component\Templating\EngineInterface;
 // TODO: Investgate Twig dependency "symfony/twig-bundle": "^2.7 || ^3.0 || ^4.0"
+// TODO: Remove Twig in filename
+// https://symfony.com/doc/current/components/templating.html
 
 /*
  * Default controller.
