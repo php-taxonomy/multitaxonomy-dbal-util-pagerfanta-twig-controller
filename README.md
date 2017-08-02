@@ -22,7 +22,10 @@ Annotation may need the controllers to be inside of a directory named Controller
         // TODO: use an interface
         // https://symfony.com/doc/master/service_container.html#the-autowire-option
 
-###  TODO PSR-7 in a long time
+### TODO Templating: remove ".html.twig" in templates filenames
+https://symfony.com/doc/current/components/templating.html
+
+### TODO PSR-7 in a long time
         // TODO: use PSR7 when ready in Symfony
         // http://symfony.com/blog/psr-7-support-in-symfony-is-here
         // Symfony 3.3 PSR7 needs https://phppackages.org/p/sensio/framework-extra-bundle
