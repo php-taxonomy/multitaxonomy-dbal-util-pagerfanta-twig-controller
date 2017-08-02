@@ -17,13 +17,11 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
-    // New in version 3.2: The functionality to get the user via the method signature was introduced in Symfony 3.2. You can still retrieve it by calling $this->getUser() if you extend the Controller class.
+    // New in version 3.2: The functionality to get the user via the method signature was introduced in Symfony 3.2.
+    // You can still retrieve it by calling $this->getUser() if you extend the Controller class.
     // http://symfony.com/doc/current/security.html#retrieving-the-user-object
 
 use Symfony\Component\Templating\EngineInterface;
-// TODO: Investgate Twig dependency "symfony/twig-bundle": "^2.7 || ^3.0 || ^4.0"
-// TODO: Remove Twig in filename
-// https://symfony.com/doc/current/components/templating.html
 
 /*
  * Default controller.
