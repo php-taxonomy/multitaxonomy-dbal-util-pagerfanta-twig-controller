@@ -42,3 +42,5 @@ Annotation may need the controllers to be inside of a directory named Controller
 * https://github.com/php-fig/fig-standards/tree/master/proposed/http-middleware
 * https://github.com/http-interop
 * Be ready to redirect or forward responses
+
+Icon: https://material.io/icons/#ic_label_outline
