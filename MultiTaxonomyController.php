@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpTaxonomy\MultiTaxonomy\DbalUtil\Pagerfanta\Twig\Controller;
+namespace PhpTaxonomy\MultiTaxonomy\DoctrineDbalUtil\Pagerfanta\Twig\Controller;
 
 // use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 // use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
