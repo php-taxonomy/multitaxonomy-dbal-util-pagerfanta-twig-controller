@@ -1,4 +1,4 @@
-# multitaxonomy-dbal-util-pagerfanta-twig-controller
+# multitaxonomy-doctrine-dbal-util-pagerfanta-twig-controller
 Multitaxonomy for DBAL-Util persistence (controllers for  pagerfanta objects and twig templates)
 
 ```php
