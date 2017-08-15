@@ -1,16 +1,16 @@
 {
-    "name": "php-taxonomy/multitaxonomy-dbal-util-pagerfanta-twig-controller",
+    "name": "php-taxonomy/multitaxonomy-doctrine-dbal-util-pagerfanta-twig-controller",
     "description": "Multitaxonomy for DBAL-Util persistence (controllers for pagerfanta objects and twig templates)",
     "keywords": ["taxonomy", "classification", "category", "tag", "dbal-util", "pagerfanta", "twig", "controller", "snowyowl"],
-    "homepage": "https://github.com/php-taxonomy/multitaxonomy-dbal-util-pagerfanta-twig-controller",
+    "homepage": "https://github.com/php-taxonomy/multitaxonomy-doctrine-dbal-util-pagerfanta-twig-controller",
     "license": "ISC",
     "authors": [
         {"name": "Jean-bernard Addor"},
-        {"name": "Community", "homepage": "https://github.com/php-taxonomy/multitaxonomy-dbal-util-pagerfanta-twig-controller"}
+        {"name": "Community", "homepage": "https://github.com/php-taxonomy/multitaxonomy-doctrine-dbal-util-pagerfanta-twig-controller"}
     ],
     "require": {
         "php": "^5.0",
-        "dbal-util/connection-pagerfanta": "^0.1",
+        "doctrine-dbal-util/connection-pagerfanta": "^0.1",
         "symfony/form": "^2.7 || ^3.0 || ^4.0",
         "symfony/http-foundation": "^2.7 || ^3.0 || ^4.0",
         "symfony/options-resolver": "^2.7 || ^3.0 || ^4.0",
@@ -24,7 +24,7 @@
     "suggest": {
     },
     "autoload": {
-        "psr-4": { "PhpTaxonomy\\MultiTaxonomy\\DbalUtil\\Pagerfanta\\Twig\\Controller\\": "" }
+        "psr-4": { "PhpTaxonomy\\MultiTaxonomy\\DoctrineDbalUtil\\Pagerfanta\\Twig\\Controller\\": "" }
     },
     "extra": {
         "branch-alias": {
