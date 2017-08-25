@@ -36,7 +36,7 @@ class IndexController // extends FrameworkAbstractController
      * @Route("/", name="taxonomy_index")
      * @Method("GET")
      */
-    public static function indexAction(
+    public function __invoke(
         Request $request, // used by pager
         UserInterface $user,
         \RaphiaDBAL $model,
