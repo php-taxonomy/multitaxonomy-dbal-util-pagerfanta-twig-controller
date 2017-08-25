@@ -31,31 +31,6 @@ use Symfony\Component\Templating\EngineInterface;
 class MultiTaxonomyController // extends FrameworkAbstractController
 {
     /*
-     * Lists all taxonomy tree entities.
-     *
-     * @Route("/", name="taxonomy_index")
-     * @Method("GET")
-     */
-    public static function indexAction(
-        Request $request, // used by pager
-        UserInterface $user,
-        \RaphiaDBAL $model,
-        EngineInterface $templating
-    )
-    {
-        return new Response($templating->render('@MultiTaxonomyDbalUtilBundle/index.html.twig', [ // why not a @string related to controller package?
-            'terms' => $model
-                ->getManyToManyWherePager('taxonomy_tree', 'uuid',
-                    'taxonomy_tree_uuid', 'link_taxonomy_tree_user', 'user_uuid',
-                    'uuid', 'http_user', ['uuid' => $user->getId()], 'base.term')
-                ->setMaxPerPage(2) // 100
-                ->setCurrentPage($request->query->getInt('page', 1))
-            ,
-        ]));
-    }
-
-    
-    /*
      * Creates a new taxonomy entity.
      *
      * @Route("/new", name="taxonomy_new")
