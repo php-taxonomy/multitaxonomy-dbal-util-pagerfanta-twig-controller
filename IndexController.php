@@ -30,20 +30,27 @@ use Symfony\Component\Templating\EngineInterface;
  */
 class IndexController // extends FrameworkAbstractController
 {
-    /*
-     * Lists all taxonomy tree entities.
-     *
-     * @Route("/", name="taxonomy_index")
-     * @Method("GET")
-     */
-    public function __invoke(
-        Request $request, // used by pager
-        UserInterface $user,
-        \RaphiaDBAL $model,
-        EngineInterface $templating
+    protected $templating;
+    protected $template;
+
+    public function __construct(
+        EngineInterface $templating,
+        \RaphiaDBAL $model, // TODO: Change for this controller's view viewmodel.
+        // $template = 'index.html.twig'
+        $template = '@MultiTaxonomyDbalUtilBundle/index.html.twig' // TODO: Change for generic and configurate in DI container.
+        // Question: is it better to have a reusable generic name for the template or to make it point to a help page for its configuration?
     )
     {
-        return new Response($templating->render('@MultiTaxonomyDbalUtilBundle/index.html.twig', [ // why not a @string related to controller package?
+        $this->templating = $templating;
+        $this->template = $template;
+    }
+
+    public function __invoke(
+        UserInterface $user,
+        Request $request = new Request() // used by pager
+    )
+    {
+        return new Response($templating->render($this->template, [ // why not a @string related to controller package?
             'terms' => $model
                 ->getManyToManyWherePager('taxonomy_tree', 'uuid',
                     'taxonomy_tree_uuid', 'link_taxonomy_tree_user', 'user_uuid',
