@@ -30,17 +30,19 @@ use Symfony\Component\Templating\EngineInterface;
  */
 class IndexController // extends FrameworkAbstractController
 {
+    protected $model;
     protected $templating;
     protected $template;
 
     public function __construct(
-        EngineInterface $templating,
         \RaphiaDBAL $model, // TODO: Change for this controller's view viewmodel.
+        EngineInterface $templating,
         // $template = 'index.html.twig'
         $template = '@MultiTaxonomyDbalUtilBundle/index.html.twig' // TODO: Change for generic and configurate in DI container.
         // Question: is it better to have a reusable generic name for the template or to make it point to a help page for its configuration?
     )
     {
+        $this->model = $model;
         $this->templating = $templating;
         $this->template = $template;
     }
