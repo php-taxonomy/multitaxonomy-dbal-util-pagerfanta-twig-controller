@@ -1,6 +1,6 @@
 taxonomy_index:
     path:     /
-    defaults: { _controller: PhpTaxonomy\MultiTaxonomy\DoctrineDbalUtil\Pagerfanta\Twig\Controller\MultiTaxonomyController::indexAction }
+    defaults: { _controller: PhpTaxonomy\MultiTaxonomy\DoctrineDbalUtil\Pagerfanta\Twig\Controller\IndexController }
     methods:  [GET]
 
 taxonomy_new:
