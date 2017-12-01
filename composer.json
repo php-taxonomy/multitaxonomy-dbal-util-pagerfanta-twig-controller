@@ -9,7 +9,7 @@
         {"name": "Community", "homepage": "https://github.com/php-taxonomy/multitaxonomy-doctrine-dbal-util-pagerfanta-twig-controller"}
     ],
     "require": {
-        "php": "^5.0",
+        "php": "^5.0 || 7.0",
         "doctrine-dbal-util/connection-pagerfanta": "^0.1",
         "symfony/form": "^2.7 || ^3.0 || ^4.0",
         "symfony/http-foundation": "^2.7 || ^3.0 || ^4.0",
